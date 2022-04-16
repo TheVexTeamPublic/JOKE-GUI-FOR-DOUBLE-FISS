@@ -1,0 +1,232 @@
+
+local UserInputService = game:GetService("UserInputService")
+local dragging
+local dragInput
+local dragStart
+local startPos
+local Character = game:GetService("Players").LocalPlayer.Character
+local FlyEnabled = false
+local Camera = game.Workspace.CurrentCamera
+local Player = game:GetService("Players").LocalPlayer
+local Input = game:GetService("UserInputService")
+local Forward = false
+local Back = false
+local Left = false
+local Right = false
+local Up = false
+local Down = false
+local GUI = Instance.new("ScreenGui")
+local Main = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local UIGradient = Instance.new("UIGradient")
+local Fly = Instance.new("TextButton")
+local UICorner_2 = Instance.new("UICorner")
+local UIGridLayout = Instance.new("UIGridLayout")
+local Noclip = Instance.new("TextButton")
+local UICorner_3 = Instance.new("UICorner")
+local Respawn = Instance.new("TextButton")
+local UICorner_4 = Instance.new("UICorner")
+local idk = Instance.new("TextButton")
+local UICorner_5 = Instance.new("UICorner")
+
+GUI.Name = "GUI"
+GUI.Parent = game:GetService("CoreGui")
+GUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Main.Name = "Main"
+Main.Parent = GUI
+Main.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Main.Position = UDim2.new(0.305447459, 0, 0.200795233, 0)
+Main.Size = UDim2.new(0, 200, 0, 300)
+
+UICorner.CornerRadius = UDim.new(0, 15)
+UICorner.Parent = Main
+
+UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))}
+UIGradient.Rotation = -90
+UIGradient.Parent = Main
+
+Fly.Name = "Fly"
+Fly.Parent = Main
+Fly.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Fly.Size = UDim2.new(0, 200, 0, 50)
+Fly.Font = Enum.Font.SourceSans
+Fly.Text = "Fly"
+Fly.TextColor3 = Color3.fromRGB(0, 0, 0)
+Fly.TextScaled = true
+Fly.TextSize = 14.000
+Fly.TextWrapped = true
+
+UICorner_2.CornerRadius = UDim.new(0, 15)
+UICorner_2.Parent = Fly
+
+UIGridLayout.Parent = Main
+UIGridLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIGridLayout.CellPadding = UDim2.new(0, 30, 0, 5)
+UIGridLayout.CellSize = UDim2.new(0, 85, 0, 50)
+
+Noclip.Name = "Noclip"
+Noclip.Parent = Main
+Noclip.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Noclip.Size = UDim2.new(0, 200, 0, 50)
+Noclip.Font = Enum.Font.SourceSans
+Noclip.Text = "No-clip"
+Noclip.TextColor3 = Color3.fromRGB(0, 0, 0)
+Noclip.TextScaled = true
+Noclip.TextSize = 14.000
+Noclip.TextWrapped = true
+
+UICorner_3.CornerRadius = UDim.new(0, 15)
+UICorner_3.Parent = Noclip
+
+Respawn.Name = "Respawn"
+Respawn.Parent = Main
+Respawn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Respawn.Size = UDim2.new(0, 200, 0, 50)
+Respawn.Font = Enum.Font.SourceSans
+Respawn.Text = "Respawn"
+Respawn.TextColor3 = Color3.fromRGB(0, 0, 0)
+Respawn.TextScaled = true
+Respawn.TextSize = 14.000
+Respawn.TextWrapped = true
+
+UICorner_4.CornerRadius = UDim.new(0, 15)
+UICorner_4.Parent = Respawn
+
+idk.Name = "idk"
+idk.Parent = Main
+idk.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+idk.Size = UDim2.new(0, 200, 0, 50)
+idk.Font = Enum.Font.SourceSans
+idk.Text = "idk"
+idk.TextColor3 = Color3.fromRGB(0, 0, 0)
+idk.TextScaled = true
+idk.TextSize = 14.000
+idk.TextWrapped = true
+
+UICorner_5.CornerRadius = UDim.new(0, 15)
+UICorner_5.Parent = idk
+
+if Noclip.Activated == true then
+	noclip = not noclip
+	game:GetService('RunService').Stepped:connect(function()
+		if noclip then
+			game.Players.LocalPlayer.Character.Humanoid:ChangeState(11)
+		end
+	end)
+end
+
+if Respawn.Activated == true then
+	Character:Destroy()
+	Character:Remove()
+end
+
+if Fly.Activated == true then
+	FlyEnabled = true
+end
+
+local function SetPlayer()
+	for i,v in pairs(Player.Character:GetChildren()) do
+		pcall(function()
+			v.Anchored = not v.Anchored
+		end)
+	end
+end
+
+Input.InputBegan:Connect(function(Key)
+	if Key.KeyCode == Enum.KeyCode.W then
+		Forward = true
+	end
+	if Key.KeyCode == Enum.KeyCode.S then
+		Back = true
+	end
+	if Key.KeyCode == Enum.KeyCode.A then
+		Left = true
+	end
+	if Key.KeyCode == Enum.KeyCode.D then
+		Right = true
+	end
+	if Key.KeyCode == Enum.KeyCode.Space then
+		Up = true
+	end
+	if Key.KeyCode == Enum.KeyCode.LeftControl then
+		Down = true
+	end
+end)
+
+Input.InputEnded:Connect(function(Key,IsChat)
+	if IsChat then return end
+	if Key.KeyCode == Enum.KeyCode.W then
+		Forward = false
+	end
+	if Key.KeyCode == Enum.KeyCode.S then
+		Back = false
+	end
+	if Key.KeyCode == Enum.KeyCode.A then
+		Left = false
+	end
+	if Key.KeyCode == Enum.KeyCode.D then
+		Right = false
+	end
+	if Key.KeyCode == Enum.KeyCode.Space then
+		Up = false
+	end
+	if Key.KeyCode == Enum.KeyCode.LeftControl then
+		Down = false
+	end
+end)
+
+while game:GetService("RunService").RenderStepped:Wait() do
+	if FlyEnabled then
+		pcall(function()
+			if Forward then
+				Player.Character:TranslateBy(Camera.CFrame.lookVector*2)
+			end
+			if Back then
+				Player.Character:TranslateBy(-Camera.CFrame.lookVector*2)
+			end
+			if Left then
+				Player.Character:TranslateBy(-Camera.CFrame:vectorToWorldSpace(Vector3.new(1,0,0))*2)
+			end
+			if Right then
+				Player.Character:TranslateBy(Camera.CFrame:vectorToWorldSpace(Vector3.new(1,0,0))*2)
+			end
+			if Up then
+				Player.Character:TranslateBy(Camera.CFrame:vectorToWorldSpace(Vector3.new(0,1,0))*2)
+			end
+			if Down then
+				Player.Character:TranslateBy(-Camera.CFrame:vectorToWorldSpace(Vector3.new(0,1,0))*2)
+			end
+		end)
+	end
+end
+
+--Drag
+
+local function update(input)
+	local delta = input.Position - dragStart
+	Main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+Main.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = Main.Position
+
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+Main.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		dragInput = input
+	end
+end)
+UserInputService.InputChanged:Connect(function(input)
+	if input == dragInput and dragging then
+		update(input)
+	end
+end)
